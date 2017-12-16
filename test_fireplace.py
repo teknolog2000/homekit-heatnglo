@@ -1,4 +1,5 @@
 import pytest
+from fireplace import Fireplace, HardwareIO
 
 class TestIO(HardwareIO):
     def toggle_onoff(self):
@@ -13,4 +14,5 @@ class TestIO(HardwareIO):
 
 def test_init():
     test_io = TestIO()
-    
+    fireplace = Fireplace(test_io)
+
