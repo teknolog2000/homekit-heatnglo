@@ -1,6 +1,7 @@
 import time # sleep
 import argparse
 from fireplace import *
+from fireplace.gpioio import GPIOIO
 
 
 def main():
@@ -14,7 +15,7 @@ def main():
 
     gpio = GPIOIO()
     fireplace = Fireplace(gpio)
-    
+
     if args.command == 'onoff':
         fireplace.toggle_onoff()
     elif args.command == 'flame':
