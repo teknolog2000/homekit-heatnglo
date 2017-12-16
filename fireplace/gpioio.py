@@ -1,3 +1,7 @@
+import RPi.GPIO as GPIO
+from . import HardwareIO
+import time
+
 class GPIOIO(HardwareIO): # stupid name, yes
     # PIN numbers in GPIO.BOARD form
     PIN_FLAME = 31

@@ -1,4 +1,3 @@
-
 class Fireplace(object):
     def __init__(self,hardware_io):
         self._hardware_io = hardware_io

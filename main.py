@@ -1,4 +1,3 @@
-import RPi.GPIO as GPIO
 import time # sleep
 import argparse
 from fireplace import *
@@ -12,11 +11,10 @@ def main():
     #                 help='sum the integers (default: find the max)')
 
     args = parser.parse_args()
-    
 
     gpio = GPIOIO()
-
     fireplace = Fireplace(gpio)
+    
     if args.command == 'onoff':
         fireplace.toggle_onoff()
     elif args.command == 'flame':
