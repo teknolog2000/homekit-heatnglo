@@ -6,13 +6,16 @@ var rpio = require('rpio');
 
 var DummyImplementation = {
   init: function() {
-    console.log("init");
+    console.log("DummyImplementation init");
   },
   togglePower: function() {
-    console.log("togglePower");
+    console.log("DummyImplementation togglePower");
   },
   toggleFan: function() {
-    console.log("toggleFan");
+    console.log("DummyImplementation toggleFan");
+  },
+  toggleFlame: function() {
+    console.log("DummyImplementation toggleFlame");
   }
 };
 
@@ -24,17 +27,31 @@ var HardwareImplementation = {
     PIN_PILOT: 37
   },
   init: function() {
+    console.log("HardwareImplementation init");    
     rpio.open(this.Pins.PIN_ONOFF, rpio.OUTPUT, rpio.LOW);
     rpio.open(this.Pins.PIN_FAN, rpio.OUTPUT, rpio.LOW);
     rpio.open(this.Pins.PIN_FLAME, rpio.OUTPUT, rpio.LOW);
     rpio.open(this.Pins.PIN_PILOT, rpio.OUTPUT, rpio.LOW);
   },
   togglePower: function() {
-    console.log("setting pin high");
-    rpio.write(this.Pins.PIN_ONOFF, rpio.HIGH);
-    rpio.sleep(1);
-    console.log("setting pin low");
-    rpio.write(this.Pins.PIN_ONOFF, rpio.LOW);
+    console.log("HardwareImplementation togglePower");
+    this._blipPin(this.Pins.PIN_ONOFF);
+  },
+  toggleFan: function() {
+    console.log("HardwareImplementation toggleFan");
+    this._blipPin(this.Pins.PIN_FAN);
+  },
+  toggleFlame: function() {
+    console.log("HardwareImplementation toggleFlame");
+    this._blipPin(this.Pins.PIN_FLAME);
+  },
+  _blipPin: function(pin) {
+    rpio.sleep(0.5);
+    console.log("setting pin " + pin + " high");
+    rpio.write(pin, rpio.HIGH);
+    rpio.sleep(0.5);
+    console.log("setting pin " + pin + " low");
+    rpio.write(pin, rpio.LOW);
   }
 };
 
@@ -45,42 +62,93 @@ var FireplaceController = {
   manufacturer: "Heat & Glo",
   model: "1.0",
   serialNumber: "0",
+  MAX_FLAME: 4,
+  MAX_FAN: 4,
   _powerOn: false,
   _fanSpeed: 0,
   _flameSize: 0,
-  _implementation: DummyImplementation,
+  _implementation: HardwareImplementation, //_implementation: DummyImplementation,
+  init: function() {
+    this._implementation.init();
+  },
   identify: function() {
     console.log("Identify the '%s'", this.name);
   },
   setPower: function(on) {
-    if (on != this._powerOn) {
-      // toggle state
-      console.log("Power state changed To " + on);
-      this._implementation.togglePower();
-      this._powerOn = on;
+    console.log("setPower");
+
+    if (on == this._powerOn) {
+      return;
     }
+
+    this._implementation.togglePower();
+    this._powerOn = on;
   },
   setFan: function(speed) {
-    if (speed != this._fanSpeed) {
-      var MAX_SPEED = 4;
+    console.log("setFan");
+    
+    if (speed == this._fanSpeed) {
+      return;
+    }
 
+    var toggles = speed - this._fanSpeed;
+    if (toggles < 0) {
+      toggles += this.MAX_FAN;
+    }
+
+    for (var i=0; i<toggles;i++) {
+      this._implementation.toggleFan();
+    }
+    
+    this._fanSpeed = speed;
+  },
+  getFan: function() {
+    console.log("getFan");
+    
+    if (!this._powerOn) {
+      return 0;
+    }
+
+    return this._fanSpeed;
+  },
+  setFlame: function(size) {
+    console.log("setFlame");
+
+    if (size == this._flameSize) {
+      return;
+    }
+
+    // ensure power is the right 
+    this.setPower(size > 0);
+
+    if (size > 0) {
       // JS doesn't have a proper modulo operator
-      var toggles = speed - this._fanSpeed;
+      var toggles = size - this._flameSize;
       if (toggles < 0) {
-        toggles += MAX_SPEED;
+        toggles += this.MAX_FLAME;
       }
 
       for (var i=0; i<toggles;i++) {
-        this._implementation.toggleFan();
+        this._implementation.toggleFlame();
       }
     }
-    this._fanSpeed = speed;
-  }
+    this._flameSize = size;
+  },
+  getFlame: function() {
+    console.log("getFlame");    
+    if (!this._powerOn) {
+      return 0;
+    }
+
+    return this._flameSize;
+  },
 };
 
 // create the HAP-NodeJS Accessory
 var UUID = uuid.generate('hap-nodejs:accessories:fireplace' + FireplaceController.name);
 var fireplaceAccessory = exports.accessory = new Accessory('Fireplace', UUID);
+
+FireplaceController.init();
 
 // add properties for publishing
 fireplaceAccessory.username = FireplaceController.username;
@@ -99,20 +167,32 @@ fireplaceAccessory.on('identify', function(paired, callback) {
   callback(); // success
 });
 
-// add the power switch service
-var switchService = fireplaceAccessory.addService(Service.Switch, "Fireplace");
-switchService.getCharacteristic(Characteristic.On)
-.on('set', function(value, callback) {
-  FireplaceController.setPower(value);
-  callback();
-});
+var flameService = fireplaceAccessory.addService(Service.Lightbulb, "Flame");
+flameService.getCharacteristic(Characteristic.On)
+  .on('set', function(value, callback) {
+    FireplaceController.setPower(value);
+    callback();
+  })
+  .on('get', function(callback) {
+      callback(null, FireplaceController._powerOn);
+  });
 
-switchService.getCharacteristic(Characteristic.On)
-.on('get', function(callback) {
-  callback(null, FireplaceController._powerOn);
-});
+flameService
+  .addCharacteristic(Characteristic.Brightness)
+  .setProps({
+    minValue: 0,
+    maxValue: 4,
+    minStep: 1
+  })
+  .on('set', function(value, callback) {
+    FireplaceController.setFlame(value);
+    callback();
+  })
+  .on('get', function(callback) {
+    callback(null, FireplaceController._flameSize);
+  });
 
-var fanService = fireplaceAccessory.addService(Service.Fan, "Fireplace Fan") // services exposed to the user should have "names" like "Fake Light" for us
+var fanService = fireplaceAccessory.addService(Service.Fan, "Fan");
 fanService.getCharacteristic(Characteristic.On)
   .on('set', function(value, callback) {
     FireplaceController.setFan(value);
@@ -122,18 +202,18 @@ fanService.getCharacteristic(Characteristic.On)
       callback(null, FireplaceController._fanSpeed);
   });
 
-// also add an "optional" Characteristic for spped
 fanService.addCharacteristic(Characteristic.RotationSpeed)
   .setProps({
     minValue: 0,
     maxValue: 4,
     minStep: 1
   })
-  .on('get', function(callback) {
-    callback(null, 0);
-  })
   .on('set', function(value, callback) {
+    FireplaceController.setFan(value);
     callback();
   })
+  .on('get', function(callback) {
+    callback(null, FireplaceController._fanSpeed);
+  });
 
-fireplaceAccessory.setPrimaryService(switchService);
+fireplaceAccessory.setPrimaryService(flameService);
