@@ -10,6 +10,9 @@ var DummyImplementation = {
   },
   togglePower: function() {
     console.log("togglePower");
+  },
+  toggleFan: function() {
+    console.log("toggleFan");
   }
 };
 
@@ -57,6 +60,22 @@ var FireplaceController = {
       this._powerOn = on;
     }
   },
+  setFan: function(speed) {
+    if (speed != this._fanSpeed) {
+      var MAX_SPEED = 4;
+
+      // JS doesn't have a proper modulo operator
+      var toggles = speed - this._fanSpeed;
+      if (toggles < 0) {
+        toggles += MAX_SPEED;
+      }
+
+      for (var i=0; i<toggles;i++) {
+        this._implementation.toggleFan();
+      }
+    }
+    this._fanSpeed = speed;
+  }
 };
 
 // create the HAP-NodeJS Accessory
@@ -81,52 +100,40 @@ fireplaceAccessory.on('identify', function(paired, callback) {
 });
 
 // add the power switch service
-var SwitchService = fireplaceAccessory.addService(Service.Switch, "Fireplace");
-SwitchService.getCharacteristic(Characteristic.On)
+var switchService = fireplaceAccessory.addService(Service.Switch, "Fireplace");
+switchService.getCharacteristic(Characteristic.On)
 .on('set', function(value, callback) {
   FireplaceController.setPower(value);
   callback();
 });
 
-SwitchService.getCharacteristic(Characteristic.On)
+switchService.getCharacteristic(Characteristic.On)
 .on('get', function(callback) {
   callback(null, FireplaceController._powerOn);
 });
 
-// var FanService = Fireplace.addService(Service.Fan, "Fireplace Fan") // services exposed to the user should have "names" like "Fake Light" for us
-// FanService.getCharacteristic(Characteristic.On)
-//   .on('set', function(value, callback) {
-//     console.log("Fan Power Changed To "+value);
-//     Fireplace_data.fanSpeed=value
-//     callback(); // Our fake Fan is synchronous - this value has been successfully set
-//   });
+var fanService = fireplaceAccessory.addService(Service.Fan, "Fireplace Fan") // services exposed to the user should have "names" like "Fake Light" for us
+fanService.getCharacteristic(Characteristic.On)
+  .on('set', function(value, callback) {
+    FireplaceController.setFan(value);
+    callback();
+  })
+  .on('get', function(callback) {
+      callback(null, FireplaceController._fanSpeed);
+  });
 
-// FanService.getCharacteristic(Characteristic.On)
-//   .on('get', function(callback) {
+// also add an "optional" Characteristic for spped
+fanService.addCharacteristic(Characteristic.RotationSpeed)
+  .setProps({
+    minValue: 0,
+    maxValue: 4,
+    minStep: 1
+  })
+  .on('get', function(callback) {
+    callback(null, 0);
+  })
+  .on('set', function(value, callback) {
+    callback();
+  })
 
-//     // this event is emitted when you ask Siri directly whether your fan is on or not. you might query
-//     // the fan hardware itself to find this out, then call the callback. But if you take longer than a
-//     // few seconds to respond, Siri will give up.
-
-//     var err = null; // in case there were any problems
-
-//     if (Fireplace_data.fanSpeed > 0) {
-//       callback(err, true);
-//     }
-//     else {
-//       callback(err, false);
-//     }
-//   });
-
-// // also add an "optional" Characteristic for spped
-// FanService.addCharacteristic(Characteristic.RotationSpeed)
-//   .on('get', function(callback) {
-//     callback(null, Fireplace_data.rSpeed);
-//   })
-//   .on('set', function(value, callback) {
-//     console.log("Setting fan rSpeed to %s", value);
-//     Fireplace_data.fanSpeed=value
-//     callback();
-//   })
-
-fireplaceAccessory.setPrimaryService(SwitchService);
+fireplaceAccessory.setPrimaryService(switchService);
