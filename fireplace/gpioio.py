@@ -4,10 +4,10 @@ import time
 
 class GPIOIO(HardwareIO): # stupid name, yes
     # PIN numbers in GPIO.BOARD form
-    PIN_FLAME = 31
-    PIN_PILOT = 33
-    PIN_ONOFF = 35
-    PIN_FAN = 37
+    PIN_ONOFF = 31
+    PIN_FAN = 33
+    PIN_FLAME = 35
+    PIN_PILOT = 37
 
     def __init__(self):
         '''
@@ -26,6 +26,7 @@ class GPIOIO(HardwareIO): # stupid name, yes
         Toggles a pin briefly on and then off
         :param int pin: The pin number (see above)
         '''
+        print 'blipping pin', pin
         GPIO.output(pin, True)
         time.sleep(0.1)
         GPIO.output(pin, False)

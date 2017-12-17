@@ -11,6 +11,7 @@ class Fireplace(object):
 
     def set_flame(self, target_flame_level):
         for _ in range(0, target_flame_level - self._flame_level):
+            print 'toggling flame'
             self._hardware_io.toggle_flame()
     
         self._flame_level = target_flame_level

@@ -17,8 +17,10 @@ def main():
     if args.command == 'onoff':
         fireplace.toggle_onoff()
     elif args.command == 'flame':
+        print 'setting flame'
         fireplace.set_flame(args.value)
     elif args.command == 'fan':
+        print 'setting fan'
         fireplace.set_fan(args.value)    
 
 
