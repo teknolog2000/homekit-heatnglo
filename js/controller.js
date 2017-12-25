@@ -1,5 +1,5 @@
-var HardwareStub = require('./hardware_stub.js').Hardware;
-var HardwareReal = require('./hardware_real.js').Hardware;
+var HardwareStub = require('./hardware_stub');
+var HardwareReal = require('./hardware_real');
 
 var FireplaceController = {
     name: "Fireplace",
@@ -93,4 +93,4 @@ var FireplaceController = {
     },
 };
 
-module.exports = { FireplaceController };
+module.exports = FireplaceController;

@@ -34,4 +34,4 @@ var Hardware = {
     }
 };
 
-module.exports = { Hardware };
+module.exports = Hardware;
