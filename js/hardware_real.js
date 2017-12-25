@@ -1,4 +1,4 @@
-var HardwareReal = {
+var Hardware = {
     Pins: {
         PIN_ONOFF: 31,
         PIN_FAN: 33,
@@ -33,3 +33,5 @@ var HardwareReal = {
         rpio.write(pin, rpio.LOW);
     }
 };
+
+module.exports = { Hardware };

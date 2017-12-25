@@ -1,5 +1,5 @@
-var HardwareStub = require('./hardware_stub.js');
-var HardwareReal = require('./hardware_real.js');
+var HardwareStub = require('./hardware_stub.js').Hardware;
+var HardwareReal = require('./hardware_real.js').Hardware;
 
 var FireplaceController = {
     name: "Fireplace",

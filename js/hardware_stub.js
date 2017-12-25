@@ -1,4 +1,4 @@
-var HardwareStub = {
+var Hardware = {
   init: function () {
     console.log("DummyImplementation init");
   },
@@ -13,4 +13,4 @@ var HardwareStub = {
   }
 };
 
-module.exports = { HardwareStub };
+module.exports = { Hardware };
