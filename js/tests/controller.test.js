@@ -1,9 +1,10 @@
 var test = require('tape');
-var FireplaceController = require('../controller.js');
+var HardwareStub = require('../hardware_stub');
+var FireplaceController = require('../controller');
 
 test('instantiate the controller', function (t) {
     t.doesNotThrow(function () {
-        FireplaceController.init();
+        FireplaceController.init(HardwareStub);
     }, 'init succeeds');
     t.end();
 });
@@ -21,4 +22,3 @@ test('power can be turned off', function (t) {
     t.equals(FireplaceController.getPower(), false, 'power is now off');
     t.end();
 });
-

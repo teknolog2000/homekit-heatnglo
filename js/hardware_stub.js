@@ -1,16 +1,16 @@
-var Hardware = {
+var Stub = {
   init: function () {
-    console.log("DummyImplementation init");
+    console.log("Stub init");
   },
   togglePower: function () {
-    console.log("DummyImplementation togglePower");
+    console.log("Stub togglePower");
   },
   toggleFan: function () {
-    console.log("DummyImplementation toggleFan");
+    console.log("Stub toggleFan");
   },
   toggleFlame: function () {
-    console.log("DummyImplementation toggleFlame");
+    console.log("Stub toggleFlame");
   }
 };
 
-module.exports = Hardware;
+module.exports = Stub;

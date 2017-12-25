@@ -3,14 +3,14 @@ var Service = require('../').Service;
 var Characteristic = require('../').Characteristic;
 var uuid = require('../').uuid;
 var rpio = require('rpio');
-
-var FireplaceController = require('./controller.js');
+var HardwareReal = require('./hardware_real');
+var FireplaceController = require('./controller');
 
 // create the HAP-NodeJS Accessory
 var UUID = uuid.generate('hap-nodejs:accessories:fireplace' + FireplaceController.name);
 var fireplaceAccessory = exports.accessory = new Accessory('Fireplace', UUID);
 
-FireplaceController.init();
+FireplaceController.init(HardwareReal);
 
 // add properties for publishing
 fireplaceAccessory.username = FireplaceController.username;

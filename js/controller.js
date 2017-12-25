@@ -1,6 +1,3 @@
-var HardwareStub = require('./hardware_stub');
-var HardwareReal = require('./hardware_real');
-
 var FireplaceController = {
     name: "Fireplace",
     username: "1B:2B:3C:4D:5E:FF",
@@ -13,8 +10,13 @@ var FireplaceController = {
     _powerOn: false,
     _fanSpeed: 0,
     _flameSize: 0,
-    _hardware: HardwareStub, //_hardware: HardwareReal,
-    init: function () {
+    _hardware: null,
+    init: function (hardware) {
+        if (!hardware) {
+            throw 'No hardware implementation provided!';
+        }
+
+        this._hardware = hardware;
         this._hardware.init();
     },
     identify: function () {
