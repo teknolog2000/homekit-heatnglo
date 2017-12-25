@@ -1,6 +1,2 @@
-venv
-.Python
+node_modules/
 .cache
-__pycache__/
-*.py[cod]
-*$py.class

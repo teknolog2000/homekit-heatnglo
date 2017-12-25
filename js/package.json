@@ -1,0 +1,18 @@
+{
+  "name": "heatnglo",
+  "version": "0.1.0",
+  "description": "Heat & Glo fireplace adapter for HomeKit",
+  "scripts": {
+    "test": "node tests/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/teknolog/fireplace.git"
+  },
+  "author": "Sebastian Brannstrom",
+  "license": "ICU",
+  "homepage": "https://bitbucket.org/teknolog/fireplace",
+  "devDependencies": {
+    "tape": "^4.8.0"
+  }
+}
