@@ -8,13 +8,11 @@ services:
       - NODE_ENV=production
     volumes:
       - ./js:/home/node/app
-    expose:
-      - "8081"
-    command: "tail -f /dev/null"
+    command: "/bin/bash"
   test:
     build: .
     user: "node"
     working_dir: /home/node/app
     volumes:
       - ./js:/home/node/app
-    command: "npm test"
+    command: "npm run lint && npm test"

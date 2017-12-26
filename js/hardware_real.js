@@ -1,3 +1,5 @@
+var rpio = require('rpio');
+
 var Hardware = {
     Pins: {
         PIN_ONOFF: 31,

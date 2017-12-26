@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "description": "Heat & Glo fireplace adapter for HomeKit",
   "scripts": {
-    "test": "node tests/*.test.js"
+    "test": "node tests/*.test.js",
+    "lint": "./node_modules/.bin/eslint ."
   },
   "repository": {
     "type": "git",
@@ -13,6 +14,7 @@
   "license": "ICU",
   "homepage": "https://bitbucket.org/teknolog/fireplace",
   "devDependencies": {
+    "eslint": "^4.14.0",
     "tape": "^4.8.0"
   }
 }
