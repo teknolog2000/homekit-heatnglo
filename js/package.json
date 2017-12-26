@@ -8,11 +8,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/teknolog/fireplace.git"
+    "url": "git+ssh://git@bitbucket.org/teknolog/homekit-heatnglo.git"
   },
   "author": "Sebastian Brannstrom",
   "license": "ICU",
-  "homepage": "https://bitbucket.org/teknolog/fireplace",
+  "homepage": "https://bitbucket.org/teknolog/homekit-heatnglo",
   "devDependencies": {
     "eslint": "^4.14.0",
     "tape": "^4.8.0"
