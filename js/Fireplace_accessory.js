@@ -17,70 +17,77 @@ fireplaceAccessory.pincode = FireplaceController.pincode;
 
 // set some basic properties
 fireplaceAccessory
-  .getService(Service.AccessoryInformation)
-  .setCharacteristic(Characteristic.Manufacturer, FireplaceController.manufacturer)
-  .setCharacteristic(Characteristic.Model, FireplaceController.model)
-  .setCharacteristic(Characteristic.SerialNumber, FireplaceController.serialNumber);
+    .getService(Service.AccessoryInformation)
+    .setCharacteristic(Characteristic.Manufacturer, FireplaceController.manufacturer)
+    .setCharacteristic(Characteristic.Model, FireplaceController.model)
+    .setCharacteristic(Characteristic.SerialNumber, FireplaceController.serialNumber);
 
+//
+// Power on/off exposed as a switch
+//
 var switchService = fireplaceAccessory.addService(Service.Switch, "Fireplace");
 switchService.getCharacteristic(Characteristic.On)
-  .on('set', function (value, callback) {
-    FireplaceController.setPower(value);
-    callback();
-  })
-  .on('get', function (callback) {
-    callback(null, FireplaceController.getPower());
-  });
+    .on('set', function (value, callback) {
+        FireplaceController.setPower(value);
+        callback();
+    })
+    .on('get', function (callback) {
+        callback(null, FireplaceController.getPower());
+    });
 
 fireplaceAccessory.setPrimaryService(switchService);
 
-// var flameService = fireplaceAccessory.addService(Service.Lightbulb, "Flame");
-// flameService.getCharacteristic(Characteristic.On)
-//   .on('set', function(value, callback) {
-//     FireplaceController.setPower(value);
-//     callback();
-//   })
-//   .on('get', function(callback) {
-//       callback(null, FireplaceController.getPower());
-//   });
+//
+// Flame height exposed as a lightbulb with adjustable brightness
+//
+var flameService = fireplaceAccessory.addService(Service.Lightbulb, "Flame");
+flameService.getCharacteristic(Characteristic.On)
+    .on('set', function (value, callback) {
+        FireplaceController.setPower(value);
+        callback();
+    })
+    .on('get', function (callback) {
+        callback(null, FireplaceController.getPower());
+    });
 
-// flameService
-//   .addCharacteristic(Characteristic.Brightness)
-//   .setProps({
-//     minValue: 0,
-//     maxValue: 4,
-//     minStep: 1
-//   })
-//   .on('set', function(value, callback) {
-//     FireplaceController.setFlame(value);
-//     callback();
-//   })
-//   .on('get', function(callback) {
-//     callback(null, FireplaceController._flameSize);
-//   });
+flameService
+    .addCharacteristic(Characteristic.Brightness)
+    .setProps({
+        minValue: 0,
+        maxValue: 4,
+        minStep: 1
+    })
+    .on('set', function (value, callback) {
+        FireplaceController.setFlame(value);
+        callback();
+    })
+    .on('get', function (callback) {
+        callback(null, FireplaceController._flameSize);
+    });
 
-// var fanService = fireplaceAccessory.addService(Service.Fan, "Fan");
-// fanService.getCharacteristic(Characteristic.On)
-//   .on('set', function(value, callback) {
-//     FireplaceController.setFan(value);
-//     callback();
-//   })
-//   .on('get', function(callback) {
-//       callback(null, FireplaceController.getFan());
-//   });
+//
+// Fan speed exposed as a... fan
+//
+var fanService = fireplaceAccessory.addService(Service.Fan, "Fan");
+fanService.getCharacteristic(Characteristic.On)
+    .on('set', function (value, callback) {
+        FireplaceController.setFan(value);
+        callback();
+    })
+    .on('get', function (callback) {
+        callback(null, FireplaceController.getFan());
+    });
 
-// fanService.addCharacteristic(Characteristic.RotationSpeed)
-//   .setProps({
-//     minValue: 0,
-//     maxValue: 4,
-//     minStep: 1
-//   })
-//   .on('set', function(value, callback) {
-//     FireplaceController.setFan(value);
-//     callback();
-//   })
-//   .on('get', function(callback) {
-//     callback(null, FireplaceController.getFan());
-//   });
-
-// fireplaceAccessory.setPrimaryService(flameService);
+fanService.addCharacteristic(Characteristic.RotationSpeed)
+    .setProps({
+        minValue: 0,
+        maxValue: 4,
+        minStep: 1
+    })
+    .on('set', function (value, callback) {
+        FireplaceController.setFan(value);
+        callback();
+    })
+    .on('get', function (callback) {
+        callback(null, FireplaceController.getFan());
+    });
