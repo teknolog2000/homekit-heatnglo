@@ -15,18 +15,12 @@ FireplaceController.init(HardwareReal);
 fireplaceAccessory.username = FireplaceController.username;
 fireplaceAccessory.pincode = FireplaceController.pincode;
 
-// set some basic properties (these values are arbitrary and setting them is optional)
+// set some basic properties
 fireplaceAccessory
   .getService(Service.AccessoryInformation)
   .setCharacteristic(Characteristic.Manufacturer, FireplaceController.manufacturer)
   .setCharacteristic(Characteristic.Model, FireplaceController.model)
   .setCharacteristic(Characteristic.SerialNumber, FireplaceController.serialNumber);
-
-// listen for the "identify" event for this Accessory
-fireplaceAccessory.on('identify', function (paired, callback) {
-  FireplaceController.identify();
-  callback(); // success
-});
 
 var switchService = fireplaceAccessory.addService(Service.Switch, "Fireplace");
 switchService.getCharacteristic(Characteristic.On)

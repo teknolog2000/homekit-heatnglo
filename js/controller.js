@@ -19,9 +19,6 @@ var FireplaceController = {
         this._hardware = hardware;
         this._hardware.init();
     },
-    identify: function () {
-        console.log("Identify the '%s'", this.name);
-    },
     setPower: function (on) {
         console.log("setPower");
 
