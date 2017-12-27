@@ -2,7 +2,7 @@ version: "2"
 services:
   devel:
     build: .
-    user: "node"
+    #user: "node"
     working_dir: /home/node/app
     environment:
       - NODE_ENV=production
@@ -16,3 +16,9 @@ services:
     volumes:
       - ./js:/home/node/app
     command: "npm run lint && npm test"
+  hap-nodejs:
+    build: .
+    working_dir: /home/node/HAP-NodeJS
+    volumes:
+      - ./js:/home/node/HAP-NodeJS/accessories
+    command: /bin/bash -c "service dbus start && service avahi-daemon start && node Core.js"

@@ -121,7 +121,7 @@ test('flame can be set when power is turned on', function (t) {
     t.end();
 });
 
-test('flamE can not be set higher than MAX_FLAME', function (t) {
+test('flame can not be set higher than MAX_FLAME', function (t) {
     var stub = new HardwareStub();
     var fc = new FireplaceController(stub);
 
@@ -135,7 +135,7 @@ test('flamE can not be set higher than MAX_FLAME', function (t) {
     t.end();
 });
 
-test('flamE can not be set to zero', function (t) {
+test('flame can not be set to zero', function (t) {
     var stub = new HardwareStub();
     var fc = new FireplaceController(stub);
 

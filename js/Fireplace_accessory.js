@@ -2,25 +2,45 @@ var Accessory = require('../').Accessory;
 var Service = require('../').Service;
 var Characteristic = require('../').Characteristic;
 var uuid = require('../').uuid;
-var HardwareReal = require('./hardware_real');
+//var Hardware = require('./hardware');
 var FireplaceController = require('./controller');
 
+console.log('Loading Fireplace accessory');
+
 // create the HAP-NodeJS Accessory
-var UUID = uuid.generate('hap-nodejs:accessories:fireplace' + FireplaceController.name);
+var UUID = uuid.generate('hap-nodejs:accessories:fireplace');
 var fireplaceAccessory = exports.accessory = new Accessory('Fireplace', UUID);
 
-FireplaceController.init(HardwareReal);
+var HardwareStub = function () {
+    this._powerToggles = 0;
+    this._fanToggles = 0;
+    this._flameToggles = 0;
+
+    this.togglePower = function () {
+        this._powerToggles += 1;
+    };
+
+    this.toggleFan = function () {
+        this._fanToggles += 1;
+    };
+
+    this.toggleFlame = function () {
+        this._flameToggles += 1;
+    };
+};
+
+var fireplaceController = new FireplaceController(new HardwareStub());
 
 // add properties for publishing
-fireplaceAccessory.username = FireplaceController.username;
-fireplaceAccessory.pincode = FireplaceController.pincode;
+fireplaceAccessory.username = "1B:2B:3C:4D:5E:FF";
+fireplaceAccessory.pincode = "031-45-154";
 
 // set some basic properties
 fireplaceAccessory
     .getService(Service.AccessoryInformation)
-    .setCharacteristic(Characteristic.Manufacturer, FireplaceController.manufacturer)
-    .setCharacteristic(Characteristic.Model, FireplaceController.model)
-    .setCharacteristic(Characteristic.SerialNumber, FireplaceController.serialNumber);
+    .setCharacteristic(Characteristic.Manufacturer, "Heat & Glo")
+    .setCharacteristic(Characteristic.Model, "1.0")
+    .setCharacteristic(Characteristic.SerialNumber, "0");
 
 //
 // Power on/off exposed as a switch
@@ -28,11 +48,11 @@ fireplaceAccessory
 var switchService = fireplaceAccessory.addService(Service.Switch, "Fireplace");
 switchService.getCharacteristic(Characteristic.On)
     .on('set', function (value, callback) {
-        FireplaceController.setPower(value);
+        fireplaceController.setPower(value);
         callback();
     })
     .on('get', function (callback) {
-        callback(null, FireplaceController.getPower());
+        callback(null, fireplaceController.getPower());
     });
 
 fireplaceAccessory.setPrimaryService(switchService);
@@ -43,11 +63,11 @@ fireplaceAccessory.setPrimaryService(switchService);
 var flameService = fireplaceAccessory.addService(Service.Lightbulb, "Flame");
 flameService.getCharacteristic(Characteristic.On)
     .on('set', function (value, callback) {
-        FireplaceController.setPower(value);
+        fireplaceController.setPower(value);
         callback();
     })
     .on('get', function (callback) {
-        callback(null, FireplaceController.getPower());
+        callback(null, fireplaceController.getPower());
     });
 
 flameService
@@ -58,11 +78,11 @@ flameService
         minStep: 1
     })
     .on('set', function (value, callback) {
-        FireplaceController.setFlame(value);
+        fireplaceController.setFlame(value);
         callback();
     })
     .on('get', function (callback) {
-        callback(null, FireplaceController._flameSize);
+        callback(null, fireplaceController._flameSize);
     });
 
 //
@@ -71,11 +91,11 @@ flameService
 var fanService = fireplaceAccessory.addService(Service.Fan, "Fan");
 fanService.getCharacteristic(Characteristic.On)
     .on('set', function (value, callback) {
-        FireplaceController.setFan(value);
+        fireplaceController.setFan(value);
         callback();
     })
     .on('get', function (callback) {
-        callback(null, FireplaceController.getFan());
+        callback(null, fireplaceController.getFan());
     });
 
 fanService.addCharacteristic(Characteristic.RotationSpeed)
@@ -85,9 +105,9 @@ fanService.addCharacteristic(Characteristic.RotationSpeed)
         minStep: 1
     })
     .on('set', function (value, callback) {
-        FireplaceController.setFan(value);
+        fireplaceController.setFan(value);
         callback();
     })
     .on('get', function (callback) {
-        callback(null, FireplaceController.getFan());
+        callback(null, fireplaceController.getFan());
     });

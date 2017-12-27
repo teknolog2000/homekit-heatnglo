@@ -1,15 +1,9 @@
 var FireplaceController = function (hardware) {
-    this.name = "Fireplace";
-    this.username = "1B:2B:3C:4D:5E:FF";
-    this.pincode = "031-45-154";
-    this.manufacturer = "Heat & Glo";
-    this.model = "1.0";
-    this.serialNumber = "0";
     this.MAX_FLAME = 3;
     this.MAX_FAN = 3;
     this._powerOn = false;
     this._fanSpeed = 0;
-    this._flameSize = 1; // flame can't be zero (unless power is off)
+    this._flameSize = 1; // flame can't really be zero unless power is off
     this._hardware = null;
 
     if (!hardware) {
