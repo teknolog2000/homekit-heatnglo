@@ -6,5 +6,6 @@ pipelines:
         caches:
           - node
         script:
+          - cd js
           - npm install
           - npm test
