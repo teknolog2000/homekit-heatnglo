@@ -21,4 +21,4 @@ services:
     working_dir: /home/node/HAP-NodeJS
     volumes:
       - ./js:/home/node/HAP-NodeJS/accessories
-    command: /bin/bash -c "service dbus start && service avahi-daemon start && node Core.js"
+    command: /bin/bash -c "service dbus start && service avahi-daemon start && npm install && node Core.js"
