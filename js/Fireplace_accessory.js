@@ -63,6 +63,7 @@ fireplaceAccessory.setPrimaryService(switchService);
 //
 // Flame height exposed as a lightbulb with adjustable brightness
 //
+
 // console.log('adding flame service');
 // var flameService = fireplaceAccessory.addService(Service.Lightbulb, "Flame");
 // flameService.getCharacteristic(Characteristic.On)
@@ -73,7 +74,7 @@ fireplaceAccessory.setPrimaryService(switchService);
 //     .on('get', function (callback) {
 //         callback(null, fireplaceController.getPower());
 //     });
-
+// 
 // flameService
 //     .addCharacteristic(Characteristic.Brightness)
 //     .setProps({
@@ -92,6 +93,7 @@ fireplaceAccessory.setPrimaryService(switchService);
 //
 // Fan speed exposed as a... fan
 //
+
 // console.log('adding fan service');
 // var fanService = fireplaceAccessory.addService(Service.Fan, "Fan");
 // fanService.getCharacteristic(Characteristic.On)
@@ -102,7 +104,7 @@ fireplaceAccessory.setPrimaryService(switchService);
 //     .on('get', function (callback) {
 //         callback(null, fireplaceController.getFan());
 //     });
-
+// 
 // fanService.addCharacteristic(Characteristic.RotationSpeed)
 //     .setProps({
 //         minValue: 0,
