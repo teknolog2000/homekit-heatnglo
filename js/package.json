@@ -16,5 +16,8 @@
   "devDependencies": {
     "eslint": "^4.14.0",
     "tape": "^4.8.0"
+  },
+  "dependencies": {
+    "rpio": "^0.9.20"
   }
 }
