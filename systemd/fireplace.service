@@ -1,0 +1,16 @@
+[Unit]
+Description = run the HomeKit heatnglo adapter
+After=syslog.target network-online.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/opt/HAP-NodeJS
+ExecStart=/usr/bin/node Core.js
+Restart=on-failure
+RestartSec=10
+KillMode=process
+
+[Install]
+WantedBy = multi-user.target
+
