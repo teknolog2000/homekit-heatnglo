@@ -1,5 +1,5 @@
 var test = require('tape');
-var FireplaceController = require('../controller');
+var FireplaceController = require('../fireplace_controller');
 
 var HardwareStub = function () {
     this._powerToggles = 0;
