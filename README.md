@@ -33,3 +33,21 @@ Most of the time you just want to run the linter and the tests, which you can do
 or inside the container 
 
 `> npm test`
+
+# Installation
+Clone the repo onto a Raspberry Pi and build it
+
+```
+> git clone https://teknolog@bitbucket.org/teknolog/homekit-heatnglo.git
+> cd homekit-heatnglo/js
+> npm install
+```
+
+Copy our own accessory into HAP-Node JS
+
+```
+> cd node_modules/hap-nodejs
+> mv accessories accessories.old
+> cp -r ../../accessories .
+```
+
