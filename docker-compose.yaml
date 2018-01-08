@@ -2,23 +2,20 @@ version: "2"
 services:
   devel:
     build: .
-    #user: "node"
-    working_dir: /home/node/app
-    environment:
-      - NODE_ENV=production
+    working_dir: /home/node
     volumes:
-      - ./js:/home/node/app
+      - ./js/accessories:/home/node/node_modules/hap-nodejs/accessories
+      - ./js:/home/node/js
     command: "/bin/bash"
   test:
     build: .
-    user: "node"
-    working_dir: /home/node/app
+    working_dir: /home/node/js
     volumes:
-      - ./js:/home/node/app
-    command: "npm run lint && npm test"
+      - ./js:/home/node/js
+    command: "npm run lint && npm run test"
   hap-nodejs:
     build: .
-    working_dir: /home/node/HAP-NodeJS
+    working_dir: /home/node
     volumes:
-      - ./js:/home/node/HAP-NodeJS/accessories
-    command: /bin/bash -c "service dbus start && service avahi-daemon start && npm install && node Core.js"
+      - ./js/accessories:/home/node/node_modules/hap-nodejs/accessories
+    command: /bin/bash -c "service dbus start && service avahi-daemon start && npm install && node node_modules/hap-nodejs/Core.js"
