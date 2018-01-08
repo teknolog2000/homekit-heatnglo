@@ -24,22 +24,29 @@ Since it is a write only interface, it has to maintain its own state machine tha
 # Development and testing
 For convenience a Docker container is provided for developing. To start an interactive shell do
 
-`> docker-compose run devel`
+```
+> docker-compose run devel
+```
 
 Most of the time you just want to run the linter and the tests, which you can do straight from the host using
 
-`>  docker-compose run test`
+```
+>  docker-compose run test
+```
 
 or inside the container 
 
-`> npm test`
+```
+> npm test
+```
 
 # Installation
 Clone the repo onto a Raspberry Pi and build it
 
 ```
+> cd /opt
 > git clone https://teknolog@bitbucket.org/teknolog/homekit-heatnglo.git
-> cd homekit-heatnglo/js
+> cd /opt/homekit-heatnglo/js
 > npm install
 ```
 
@@ -51,3 +58,11 @@ Copy our own accessory into HAP-Node JS
 > cp -r ../../accessories .
 ```
 
+Install and enable the systemd service which will ensure the service gets started with the Raspberry
+
+```
+> cd /opt/homekit-heatnglo
+> ln -s /opt/homekit-heatnglo/systemd/fireplace.service /etc/systemd/system/fireplace.service
+> systemctl enable fireplace.service
+> systemctl start fireplace.service
+```
