@@ -14,7 +14,7 @@
   "license": "ICU",
   "homepage": "https://bitbucket.org/teknolog/homekit-heatnglo",
   "devDependencies": {
-    "eslint": "^4.15.0",
+    "eslint": "^4.16.0",
     "tape": "^4.8.0"
   },
   "dependencies": {
